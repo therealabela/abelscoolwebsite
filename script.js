@@ -1,3 +1,24 @@
+// Check if user is on iPad
+function isIPad() {
+    const userAgent = navigator.userAgent.toLowerCase();
+    return /ipad/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+// Hide download buttons if not on iPad
+if (!isIPad()) {
+    // Hide the download button
+    const downloadButton = document.querySelector('.download-button');
+    if (downloadButton) {
+        downloadButton.style.display = 'none';
+    }
+
+    // Hide the CTA button in hero section
+    const ctaButton = document.querySelector('.cta-button');
+    if (ctaButton) {
+        ctaButton.style.display = 'none';
+    }
+}
+
 // Dynamic navbar on scroll
 const header = document.querySelector('.header');
 let lastScroll = 0;
