@@ -4,18 +4,24 @@ function isIPad() {
     return /ipad/.test(userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 }
 
-// Hide download buttons if not on iPad
+// Replace download buttons with unsupported message if not on iPad
 if (!isIPad()) {
-    // Hide the download button
+    // Replace the download button with unsupported message
     const downloadButton = document.querySelector('.download-button');
     if (downloadButton) {
-        downloadButton.style.display = 'none';
+        const unsupportedText = document.createElement('p');
+        unsupportedText.className = 'unsupported-message';
+        unsupportedText.textContent = 'This device is not supported!';
+        downloadButton.parentNode.replaceChild(unsupportedText, downloadButton);
     }
 
-    // Hide the CTA button in hero section
+    // Replace the CTA button in hero section with unsupported message
     const ctaButton = document.querySelector('.cta-button');
     if (ctaButton) {
-        ctaButton.style.display = 'none';
+        const unsupportedText = document.createElement('p');
+        unsupportedText.className = 'unsupported-message';
+        unsupportedText.textContent = 'This device is not supported!';
+        ctaButton.parentNode.replaceChild(unsupportedText, ctaButton);
     }
 }
 
@@ -151,6 +157,125 @@ window.addEventListener('scroll', function() {
         const speed = (index + 1) * 0.1;
         card.style.transform = `translateY(${scrolled * speed}px)`;
     });
+});
+
+// Smooth scroll progress indicator
+const createScrollIndicator = () => {
+    const indicator = document.createElement('div');
+    indicator.className = 'scroll-indicator';
+    indicator.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        z-index: 1000;
+        transform-origin: left;
+        transform: scaleX(0);
+        transition: transform 0.1s ease;
+    `;
+    document.body.appendChild(indicator);
+
+    window.addEventListener('scroll', () => {
+        const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const scrolled = (window.pageYOffset / windowHeight);
+        indicator.style.transform = `scaleX(${scrolled})`;
+    });
+};
+
+createScrollIndicator();
+
+// Add cursor follower effect for buttons
+const buttons = document.querySelectorAll('.cta-button, .download-button');
+buttons.forEach(button => {
+    button.addEventListener('mousemove', function(e) {
+        const rect = this.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        this.style.setProperty('--mouse-x', `${x}px`);
+        this.style.setProperty('--mouse-y', `${y}px`);
+    });
+});
+
+// Enhanced card interaction
+const allCards = document.querySelectorAll('.feature-card, .showcase-card');
+allCards.forEach(card => {
+    card.addEventListener('mouseenter', function() {
+        this.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    });
+
+    card.addEventListener('mouseleave', function() {
+        this.style.transition = 'all 0.3s ease';
+    });
+});
+
+// Scroll to top button functionality
+const scrollToTopBtn = document.getElementById('scrollToTop');
+
+window.addEventListener('scroll', () => {
+    if (window.pageYOffset > 300) {
+        scrollToTopBtn.classList.add('visible');
+    } else {
+        scrollToTopBtn.classList.remove('visible');
+    }
+});
+
+scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
+const floatingCards = document.querySelectorAll('.floating-card');
+floatingCards.forEach(card => {
+    card.addEventListener('click', function() {
+        const icon = this.querySelector('.card-icon').textContent.trim();
+        const info = cardDescriptions[icon];
+
+        if (info) {
+            // Create modal overlay
+            const modal = document.createElement('div');
+            modal.className = 'card-modal';
+            modal.innerHTML = `
+                <div class="card-modal-content">
+                    <button class="card-modal-close" aria-label="Close modal">&times;</button>
+                    <div class="card-modal-icon">${icon}</div>
+                    <h3 class="card-modal-title">${info.title}</h3>
+                    <p class="card-modal-description">${info.description}</p>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+
+            // Trigger animation
+            setTimeout(() => modal.classList.add('active'), 10);
+
+            // Close handlers
+            const closeModal = () => {
+                modal.classList.remove('active');
+                setTimeout(() => modal.remove(), 300);
+            };
+
+            modal.querySelector('.card-modal-close').addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            // Close on escape key
+            const handleEscape = (e) => {
+                if (e.key === 'Escape') {
+                    closeModal();
+                    document.removeEventListener('keydown', handleEscape);
+                }
+            };
+            document.addEventListener('keydown', handleEscape);
+        }
+    });
+
+    // Add pointer cursor
+    card.style.cursor = 'pointer';
 });
 
 console.log('🚀 Interactive Web App loaded successfully!');
