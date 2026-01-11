@@ -228,6 +228,22 @@ scrollToTopBtn.addEventListener('click', () => {
     });
 });
 
+// Card descriptions for floating cards
+const cardDescriptions = {
+    '🍃': {
+        title: 'leaf blower',
+        description: 'A very dumb Siri Alternative that lets you search the web using just your voice. No typing needed!'
+    },
+    '🔋': {
+        title: 'SaveMyBattery',
+        description: 'Optimize your iPad\'s battery life with one tap. Toggles battery saver, disables transparency and motion effects.'
+    },
+    '📐': {
+        title: 'Quickscreen',
+        description: 'Quickly split screen your apps and resize windows with ease. Perfect for multitasking on iPad.'
+    }
+};
+
 const floatingCards = document.querySelectorAll('.floating-card');
 floatingCards.forEach(card => {
     card.addEventListener('click', function() {
