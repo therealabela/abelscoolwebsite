@@ -403,7 +403,7 @@ body::before {
 /* Features Section */
 .features {
     padding: 6rem 2rem;
-    background: linear-gradient(135deg, var(--bg) 0%, var(--bg-light) 100%);
+    background: var(--bg);
     position: relative;
     overflow: hidden;
 }
@@ -661,12 +661,21 @@ body::before {
 /* Interactive Section */
 .interactive-section {
     padding: 6rem 2rem;
+    background: var(--bg);
 }
 
 .interactive-demo {
     max-width: 600px;
     margin: 0 auto;
     text-align: center;
+}
+
+.download-changelog-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .color-palette {
@@ -828,6 +837,137 @@ body::before {
     border-color: rgba(102, 126, 234, 0.5);
     color: var(--text);
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Changelog Card */
+.changelog-card {
+    text-align: left;
+}
+
+.changelog-card .download-icon-wrapper {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.changelog-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.changelog-header h3 {
+    margin-bottom: 0;
+}
+
+.version-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+    border: 1px solid rgba(102, 126, 234, 0.4);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.changelog-content {
+    max-height: 400px;
+    overflow-y: auto;
+    text-align: left;
+    padding: 1.5rem;
+    background: rgba(15, 20, 25, 0.5);
+    border-radius: 15px;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.changelog-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.changelog-content::-webkit-scrollbar-track {
+    background: rgba(26, 32, 44, 0.5);
+    border-radius: 10px;
+}
+
+.changelog-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 10px;
+}
+
+.changelog-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+}
+
+.changelog-content h1,
+.changelog-content h2,
+.changelog-content h3 {
+    color: var(--text);
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.changelog-content h1 {
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.changelog-content h2 {
+    font-size: 1.25rem;
+    color: var(--primary);
+}
+
+.changelog-content h3 {
+    font-size: 1.1rem;
+    color: var(--text);
+}
+
+.changelog-content p,
+.changelog-content li {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.changelog-content ul,
+.changelog-content ol {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.changelog-content code {
+    background: rgba(102, 126, 234, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+    color: var(--accent);
+}
+
+.changelog-content pre {
+    background: rgba(15, 20, 25, 0.8);
+    padding: 1rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.loading-text {
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
 }
 
 /* Footer */
@@ -1229,6 +1369,11 @@ body::before {
     }
 
     /* Download Section */
+    .download-changelog-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
     .demo-card {
         padding: 2.5rem 1.5rem;
     }
@@ -1261,6 +1406,11 @@ body::before {
     .badge-small {
         font-size: 0.75rem;
         padding: 0.4rem 0.85rem;
+    }
+
+    .changelog-content {
+        max-height: 300px;
+        padding: 1rem;
     }
 
     /* Color Palette */

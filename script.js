@@ -294,4 +294,80 @@ floatingCards.forEach(card => {
     card.style.cursor = 'pointer';
 });
 
+// Fetch and display changelog
+async function fetchChangelog() {
+    const changelogContent = document.getElementById('changelogContent');
+
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/therealabela/abel_tools_datarepo/refs/heads/main/changelog.md');
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch changelog');
+        }
+
+        const markdown = await response.text();
+
+        // Simple markdown to HTML conversion
+        let html = markdown
+            // Headers
+            .replace(/^### (.*$)/gim, '<h3>$1</h3>')
+            .replace(/^## (.*$)/gim, '<h2>$1</h2>')
+            .replace(/^# (.*$)/gim, '<h1>$1</h1>')
+            // Bold
+            .replace(/\*\*(.*?)\*\*/gim, '<strong>$1</strong>')
+            // Italic
+            .replace(/\*(.*?)\*/gim, '<em>$1</em>')
+            // Links
+            .replace(/\[([^\]]+)\]\(([^)]+)\)/gim, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+            // Code blocks
+            .replace(/```([^`]+)```/gim, '<pre><code>$1</code></pre>')
+            // Inline code
+            .replace(/`([^`]+)`/gim, '<code>$1</code>')
+            // Unordered lists
+            .replace(/^\* (.*$)/gim, '<li>$1</li>')
+            .replace(/^- (.*$)/gim, '<li>$1</li>')
+            // Line breaks
+            .replace(/\n\n/g, '</p><p>')
+            .replace(/\n/g, '<br>');
+
+        // Wrap list items in ul tags
+        html = html.replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>');
+
+        // Wrap in paragraph if not already wrapped
+        if (!html.startsWith('<h') && !html.startsWith('<ul') && !html.startsWith('<pre')) {
+            html = '<p>' + html + '</p>';
+        }
+
+        changelogContent.innerHTML = html;
+
+    } catch (error) {
+        console.error('Error fetching changelog:', error);
+        changelogContent.innerHTML = '<p class="loading-text" style="color: #fca5a5;">Failed to load changelog. Please try again later.</p>';
+    }
+}
+
+// Fetch and display version
+async function fetchVersion() {
+    const versionBadge = document.getElementById('versionBadge');
+
+    try {
+        const response = await fetch('https://raw.githubusercontent.com/therealabela/abel_tools_datarepo/refs/heads/main/version.md');
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch version');
+        }
+
+        const version = await response.text();
+        versionBadge.textContent = `Version: ${version.trim()}`;
+
+    } catch (error) {
+        console.error('Error fetching version:', error);
+        versionBadge.textContent = 'Version: N/A';
+    }
+}
+
+// Load changelog and version when page loads
+fetchChangelog();
+fetchVersion();
+
 console.log('🚀 Interactive Web App loaded successfully!');
